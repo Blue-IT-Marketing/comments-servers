@@ -59,12 +59,14 @@ class UsersService{
     }
 
     async remove(uid){
-        index = this.users.findIndex(user => user.uid === uid);
-        if (index => 0){
-            this.users = this.users.split(index,1);
-            return true;
-        }
-        return false;
+
+        Users.deleteOne({uid:uid}).exec().then(results => {
+            if(results.deletedCount > 0){
+                return results.ok;
+            }
+            return null;
+
+        }).catch(error => error);        
     }
 }
 
