@@ -67,11 +67,5 @@ app.publish(() => app.channel('commenting'));
 app.listen(PORT).on('listening', () => {
   console.log('comments realtime live server listening on',PORT);
 });
-// __________________________________this is the end coming next is temporary example -------
-const main = () => {
-  const id = uuidv4();
-  
-};
 
-
-main();
+//___________________this is the end coming next is temporary example -------//

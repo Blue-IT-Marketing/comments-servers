@@ -60,12 +60,9 @@ class UsersService{
 
     async remove(uid){
 
-        Users.deleteOne({uid:uid}).exec().then(results => {
-            if(results.deletedCount > 0){
-                return results.ok;
-            }
+        Users.deleteOne({uid:uid}).exec().then(results => {            
+            if(results.deletedCount > 0){return results.ok;}
             return null;
-
         }).catch(error => error);        
     }
 }
