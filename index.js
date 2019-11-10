@@ -18,12 +18,10 @@ const cache = require("express-redis-cache")({client: redis.createClient(cache_c
 
 const PORT = process.env.PORT || 3030;
 
-
-
 const app = express(feathers());
 
-app.configure(configuration());
 
+app.configure(configuration());
 // adding cors
 app.use(helmet());
 app.use(cors());
@@ -45,8 +43,8 @@ app.configure(services);
 
 // configure middlewares for 404
 
-// app.use(express.notFound());
-// app.use(express.errorHandler({logger}));
+app.use(express.notFound());
+
 
 app.service('comments').on('created', (comment) => {
   // todo hook a database right here to save created comments
@@ -95,7 +93,7 @@ const main = () => {
   });
 
 
-  app.service('comments').delete(id);
+  app.service('comments').remove(id);
 };
 
 
