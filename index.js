@@ -5,13 +5,14 @@ const socketio = require("@feathersjs/socketio");
 
 
 const cors = require("cors");
-const config = require("config");
+
 const uuidv4 = require("uuid/v4");
 const helmet = require("helmet");
 
 
 const services = require('./services');
 
+const redis_cache = require('./redis-cache').redis_cache;
 
 const PORT = process.env.PORT || 3030;
 
@@ -66,31 +67,10 @@ app.publish(() => app.channel('commenting'));
 app.listen(PORT).on('listening', () => {
   console.log('comments realtime live server listening on',PORT);
 });
-
+// __________________________________this is the end coming next is temporary example -------
 const main = () => {
   const id = uuidv4();
-  app.service('comments').create({
-        id: id,
-        parent_id : '',
-        originURL : 'localhost',
-        post_endpoint : 'masinya ndi ene',
-        author: 'justice ndou',
-        comment: 'hello world',
-        timestamp: Date.now()
-  });
-
-  app.service('comments').create({
-        id: uuidv4(),
-        parent_id : '',
-        originURL : 'localhost',
-        post_endpoint : 'masinya ndi ene',
-        author: 'justice ndou',
-        comment: 'hello world',
-        timestamp: Date.now()
-  });
-
-
-  app.service('comments').remove(id);
+  
 };
 
 

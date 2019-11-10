@@ -5,9 +5,14 @@ const cache_config = { redis: process.env.REDIS_URL || config.get("redis") };
 
 let cache;
 try {
-  cache = require("express-redis-cache")({
-    client: redis.createClient(cache_config.redis)
-  });
+  cache = require("express-redis-cache")({ client: redis.createClient(cache_config.redis)});
+  console.log('redis cache connected');
 } catch (error) {
   console.log(error.message);
 }
+
+
+
+module.exports = {
+    redis_cache : cache
+};
