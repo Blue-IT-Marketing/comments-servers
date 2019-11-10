@@ -11,8 +11,6 @@ try {
   console.log(error.message);
 }
 
-
-
 module.exports = {
     redis_cache : cache
 };
