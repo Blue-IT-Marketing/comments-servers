@@ -56,6 +56,7 @@ class CommentsService {
     }
 
     async update(data){
+        
         const comment = {
           id: data.id,
           parent_id: data.parent_id,

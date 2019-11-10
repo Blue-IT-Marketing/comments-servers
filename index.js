@@ -54,8 +54,6 @@ app.service('comments').on('removed', (comment) => {
   console.log('this comment was deleted', comment);
 });
 
-
-
 app.use(express.errorHandler());
 
 app.on('connection',connection => {
@@ -68,4 +66,33 @@ app.listen(PORT).on('listening', () => {
   console.log('comments realtime live server listening on',PORT);
 });
 
-//___________________this is the end coming next is temporary example -------//
+// __________________________________this is the end coming next is temporary example -------
+
+const main = () => {
+  const id = uuidv4();
+  app.service('comments').create({
+        id: id,
+        parent_id : '',
+        originURL : 'localhost',
+        post_endpoint : 'masinya ndi ene',
+        author: 'justice ndou',
+        comment: 'hello world',
+        timestamp: Date.now()
+  });
+
+  app.service('comments').create({
+        id: uuidv4(),
+        parent_id : '',
+        originURL : 'localhost',
+        post_endpoint : 'masinya ndi ene',
+        author: 'justice ndou',
+        comment: 'hello world',
+        timestamp: Date.now()
+  });
+
+
+  app.service('comments').remove(id);
+};
+
+
+main();
