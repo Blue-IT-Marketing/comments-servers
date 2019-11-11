@@ -30,7 +30,7 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }))
 
-// app.use('/', express.static(app.get('public')));
+app.use('/', express.static(app.get(__dirname + '/public')));
 
 app.configure(express.rest());
 app.configure(socketio());
