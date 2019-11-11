@@ -32,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get('/', (req,res) => {
-  res.status(200).sendFile(path.join(__dirname,'build','index.html'));
+  res.status(200).sendFile(path.join(__dirname,'public','index.html'));
 });
 
 app.configure(express.rest());
