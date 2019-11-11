@@ -3,20 +3,19 @@ const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
 const socketio = require("@feathersjs/socketio");
 
+const uuidv4 = require("uuid/v4");
+const services = require("./services");
+
+const redis_cache = require("./redis-cache").redis_cache;
 
 const cors = require("cors");
-
-const uuidv4 = require("uuid/v4");
 const helmet = require("helmet");
-
-
-const services = require('./services');
-
-const redis_cache = require('./redis-cache').redis_cache;
+const path = require('path');
 
 const PORT = process.env.PORT || 3030;
 
 const app = express(feathers());
+
 
 
 app.configure(configuration());
@@ -28,9 +27,13 @@ app.use(cors());
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/', express.static(app.get(__dirname + '/public')));
+
+
+app.get('/', (req,res) => {
+  res.status(200).sendFile(path.join(__dirname,'build','index.html'));
+});
 
 app.configure(express.rest());
 app.configure(socketio());
@@ -38,10 +41,12 @@ app.configure(socketio());
 // set up services
 app.configure(services);
 
-
 // configure middlewares for 404
 
 app.use(express.notFound());
+
+// configure middleware for errorhandling
+app.use(express.errorHandler());
 
 
 app.service('comments').on('created', (comment) => {
@@ -54,7 +59,6 @@ app.service('comments').on('removed', (comment) => {
   console.log('this comment was deleted', comment);
 });
 
-app.use(express.errorHandler());
 
 app.on('connection',connection => {
   app.channel('commenting').join(connection);
@@ -63,7 +67,7 @@ app.on('connection',connection => {
 app.publish(() => app.channel('commenting'));
 
 app.listen(PORT).on('listening', () => {
-  console.log('comments realtime live server listening on',PORT);
+  console.log('comments realtime live server listening on : ',PORT);
 });
 
 // __________________________________this is the end coming next is temporary example -------
