@@ -92,3 +92,4 @@ class CommentsService {
 module.exports = function(app){
     app.use('/comments', new CommentsService());
 };
+
