@@ -16,7 +16,7 @@ class EndPointsService {
     
     constructor(){
         this.endpoints = new EndPoints();
-    };
+    }
 
 
     async find (id){
@@ -36,6 +36,37 @@ class EndPointsService {
     }
     // add other endpoints
 
+    async remove(id){
+        return await EndPoints.deleteOne({id : id}).exec().then(results => {
+            if(results.deletedCount > 0){
+                return results.ok;
+            }
+            return null;
+
+        }).catch(error => error);
+    }
+
+    async returnByOwner(uid){
+        return await EndPoints.find({uid : uid}).exec().then(endpoints => endpoints).catch(error => null);
+    }
+
+    // this would return an endpoints by site
+    async returnBySite(siteURL){
+        return await EndPoints.find({ siteURL: siteURL }).then(siteURL => siteURL).catch(error => null);
+    }
+
+    // return by complete end point 
+    async returnByEndPoint(endPoint){
+        return await EndPoints.find({
+          siteURL: endPoint.siteURL,
+          postURL: endPoint.postURL
+        })
+          .exec()
+          .then(endpoints => endpoints)
+          .catch(error => null);
+    }
+
+    
 }
 
 
