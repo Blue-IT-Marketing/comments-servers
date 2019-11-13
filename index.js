@@ -97,8 +97,12 @@ const main = () => {
     timestamp: Date.now()
   });
 
-
-  console.log(app.service("comments").returnbyTag('cars'));
+  const tag = 'cars';
+  app.service("comments").returnbyTag(tag).then(response => {
+    console.log("return by tag", response);
+    response.forEach(comment => console.log('tag : ', comment));
+  });
+  
 };
 
 
