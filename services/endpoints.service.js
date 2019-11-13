@@ -9,9 +9,10 @@ const uuidv4 = require("uuid/v4");
     // siteURL:{type:String,required:true},
     // postURL:{type:String,required:true},
     // count : {type:Number,required:true}
-
-
-
+/**
+ * 
+ * TODO- needs to add authentication in endpoint service
+ */
 class EndPointsService {
     
     constructor(){
@@ -66,7 +67,7 @@ class EndPointsService {
           .catch(error => null);
     }
 
-    
+
 }
 
 

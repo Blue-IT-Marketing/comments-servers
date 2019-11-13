@@ -4,6 +4,7 @@ const Users = require('../schemas').Users;
 const EndPoints = require('../schemas').EndPoints;
 const uuidv4 = require("uuid/v4");
 class CommentsService {
+
     constructor(){
         this.comments = new Comments();
     }
@@ -32,13 +33,20 @@ class CommentsService {
           timestamp: Date.now()
         };
 
-        const newComment = new Comments(comment);
+        // check if endpoint exist
+        // check if user exist 
+        // then create endpoint
 
-       return await newComment.save().then(results => {
-            return comment;
-        }).catch(error => {
-            return error;
-        });                
+        return Users.find({uid : data.uid}).exec().then(user => {
+            return EndPoints.find({id : data.post_endpoint}).exec().then(endpoint => {
+                const newComment = new Comments(comment);
+                return newComment.save().then(results => {
+                        return comment;
+                    }).catch(error => {
+                        return error;
+                    });                
+            }).catch(error => null)
+        }).catch(error => null)        
     }
 
     async update(data){
@@ -52,6 +60,8 @@ class CommentsService {
           tags: data.tags,
           timestamp: Date.now()
         };
+
+        // TODO- try and find decide if updating comments dont break any security rules
 
        return await Comments.update({id : comment.id},comment, (err,results) => {
             if(err){
