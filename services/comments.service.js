@@ -1,6 +1,8 @@
 // todo add mongodb and add this functionality for mongodb 
 const Comments = require('../schemas').Comments;
 const Users = require('../schemas').Users;
+const EndPoints = require('../schemas').EndPoints;
+const uuidv4 = require("uuid/v4");
 class CommentsService {
     constructor(){
         this.comments = new Comments();
@@ -21,10 +23,10 @@ class CommentsService {
     async create(data){
         
         const comment = {
-          id: data.id,
+          id: data.id || uuidv4(),
           parent_id: data.parent_id,
           post_endpoint: data.post_endpoint,
-          author: data.author,
+          uid: data.uid,
           comment: data.comment,
           tags: data.tags,
           timestamp: Date.now()
@@ -45,7 +47,7 @@ class CommentsService {
           id: data.id,
           parent_id: data.parent_id,
           post_endpoint: data.post_endpoint,
-          author: data.author,
+          uid: data.uid,
           comment: data.comment,
           tags: data.tags,
           timestamp: Date.now()
@@ -71,31 +73,21 @@ class CommentsService {
         }).catch(error => error);        
     }
 
-    async commentsByUser(uid){
-        const author = await Users.find({uid : uid}).exec().then(user => {
-            return user
-        }).catch(error => null);
-
-        if (author){
-            return Comments.find({author : author}).exec().then(comment => comment).catch(error => error)
-        }else{return null}
+    async returnByUser(uid){
+        return await Comments.find({uid : uid}).exec().then(comments => comments).catch(error => error);
     }
 
     // given a parent id return all threaded comments
-    async threads(id){
-        return await Comments.find({parent_id : id }).exec().then(comments => {
-            return comments
-        }).catch(error =>  null);
+    async returnByThreads(id){
+        return await Comments.find({parent_id : id }).exec().then(comments => comments).catch(error =>  null);
     }
 
-    // return a list of comments by post endpoint
+    // return a list of comments by post endpoint id
     async returnByEndPoint(post_endpoint){
-        return await Comments.find({post_endpoint : post_endpoint}).exec().then(comments => {
-            return comments;
-        }).catch(error =>  null);
+        return await Comments.find({post_endpoint : post_endpoint}).exec().then(comments => comments).catch(error =>  null);
     }
 
-    async returnbyTag(tag){
+    async returnByTag(tag){
         return await Comments.find({tags : { $in: [tag] }}).exec().then(comments => comments).catch(error => null);
     }
 

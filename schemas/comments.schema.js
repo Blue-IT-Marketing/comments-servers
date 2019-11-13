@@ -4,20 +4,15 @@ let Schema = mongoose.Schema;
 
 
 let CommentsSchema = new Schema({
+
   id: {type:String,required:true},
-  parent_id : {type:String,required:false},  
-  post_endpoint : {siteURL:{type:String,required:true},postURL:{type:String,required:true}},
-  author: {
-    uid:{type:String,required:true},
-    names:{type:String},
-    tags:Array,
-    job:String,
-    description: String,
-    avatar:String
-  },
+  parent_id : {type:String,required:false},
+  post_endpoint : {type:String,required:true},
+  uid : {type:String,required:true},
   comment: {type:String,required:true},
   tags:{type:Array},
   timestamp: {type:Date, 'default': Date.now}
+  
 });
 
 module.exports = CommentsSchema;

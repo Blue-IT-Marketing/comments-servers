@@ -22,37 +22,29 @@ app.configure(services);
 // __________________________________this is the end coming next is temporary example -------
 
 const main = () => {
-  const id = uuidv4();
+  
   app.service("comments").create({
-    id: id,
+    id: uuidv4(),
     parent_id: "",    
-    post_endpoint : {
-      siteURL:'http://localhost',
-      postURL:'original-post.html'
-    },
-
-    author: {
-      uid: '87485934hfdsf874',
-      names: 'justice ndou',
-      tags: 'mercedes benz',
-      job: 'designer',
-      description: 'designer of mercesdes cars',
-      avatar: '',
-      lastlogin: '2019-11-12'
-    },
-
+    post_endpoint : '324234234523',   
+    uid: '87485934hfdsf874',
     comment: "hello world",
     tags : ['cars','mercedes','electric cars'],
     timestamp: Date.now()
   });
 
   const tag = 'cars';
-  app.service("comments").returnbyTag(tag).then(response => {
-    console.log("return by tag", response);
-    response.forEach(comment =>{ console.log('tag : ', comment); console.log(`------------------------`)});
-    console.log(`-------------------tests done-----------------`);
-
-  });
+  app
+    .service("comments")
+    .returnByTag(tag)
+    .then(response => {
+      console.log("return by tag", response);
+      response.forEach(comment => {
+        console.log("tag : ", comment);
+        console.log(`------------------------`);
+      });
+      console.log(`-------------------tests done-----------------`);
+    });
   
 };
 
