@@ -64,7 +64,7 @@ app.on('connection',connection => {
   app.channel('commenting').join(connection);
 });
 
-app.publish(() => app.channel('commenting'));
+app.publish(() => app.channel("comments"));
 
 app.listen(PORT).on('listening', () => {
   console.log('comments realtime live server listening on : ',PORT);
@@ -74,28 +74,31 @@ app.listen(PORT).on('listening', () => {
 
 const main = () => {
   const id = uuidv4();
-  app.service('comments').create({
-        id: id,
-        parent_id : '',
-        originURL : 'localhost',
-        post_endpoint : 'masinya ndi ene',
-        author: 'justice ndou',
-        comment: 'hello world',
-        timestamp: Date.now()
+  app.service("comments").create({
+    id: id,
+    parent_id: "",    
+    post_endpoint : {
+      siteURL:'http://localhost',
+      postURL:'original-post.html'
+    },
+
+    author: {
+      uid: '87485934hfdsf874',
+      names: 'justice ndou',
+      tags: 'mercedes benz',
+      job: 'designer',
+      description: 'designer of mercesdes cars',
+      avatar: '',
+      lastlogin: '2019-11-12'
+    },
+
+    comment: "hello world",
+    tags : ['cars','mercedes','electric cars'],
+    timestamp: Date.now()
   });
 
-  app.service('comments').create({
-        id: uuidv4(),
-        parent_id : '',
-        originURL : 'localhost',
-        post_endpoint : 'masinya ndi ene',
-        author: 'justice ndou',
-        comment: 'hello world',
-        timestamp: Date.now()
-  });
 
-
-  app.service('comments').remove(id);
+  console.log(app.service("comments").returnbyTag('cars'));
 };
 
 

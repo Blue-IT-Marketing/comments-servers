@@ -1,32 +1,16 @@
 // todo add mongodb and add this functionality for mongodb 
 const Comments = require('../schemas').Comments;
-
-//   id: {type:String,required:true},
-//   parent_id : {type:String,required:false},  
-//   post_endpoint : {siteURL:{type:String,required:true},postURL:{type:String,required:true}},
-//   author: {
-//     uid:{type:String,required:true},
-//     names:{type:String},
-//     tags:Array,
-//     job:String,
-//     description: String,
-//     avatar:String
-//   },
-//   comment: {type:String,required:true},
-//   tags:{type:Array},
-//   timestamp: {type:Date, 'default': Date.now}
-
-
-
+const Users = require('../schemas').Users;
 class CommentsService {
     constructor(){
         this.comments = new Comments();
     }
 
+
     async find(id){
         // return this.comments.find(comment => comment.id === id);
 
-        await Comments.find({ id : id}).exec().then(comment => {
+       return await Comments.find({ id : id}).exec().then(comment => {
             return comment;
         }).catch(error => {
             console.log(error);
@@ -38,17 +22,17 @@ class CommentsService {
         
         const comment = {
           id: data.id,
-          parent_id:data.parent_id,
-          originURL: data.originURL,
+          parent_id: data.parent_id,
           post_endpoint: data.post_endpoint,
           author: data.author,
           comment: data.comment,
+          tags: data.tags,
           timestamp: Date.now()
         };
 
         const newComment = new Comments(comment);
 
-       await newComment.save().then(comment => {
+       return await newComment.save().then(results => {
             return comment;
         }).catch(error => {
             return error;
@@ -60,14 +44,14 @@ class CommentsService {
         const comment = {
           id: data.id,
           parent_id: data.parent_id,
-          originURL: data.originURL,
           post_endpoint: data.post_endpoint,
           author: data.author,
           comment: data.comment,
+          tags: data.tags,
           timestamp: Date.now()
         };
 
-        await Comments.update({id : comment.id},comment, (err,results) => {
+       return await Comments.update({id : comment.id},comment, (err,results) => {
             if(err){
                 return err;
             }
@@ -78,13 +62,41 @@ class CommentsService {
 
     async remove(id){
 
-        await Comments.deleteOne({id : id}).exec().then(results => {
+       return await Comments.deleteOne({id : id}).exec().then(results => {
             if(results.deletedCount > 0){
                 return results.ok;
             }
             return null;
 
         }).catch(error => error);        
+    }
+
+    async commentsByUser(uid){
+        const author = await Users.find({uid : uid}).exec().then(user => {
+            return user
+        }).catch(error => null);
+
+        if (author){
+            return Comments.find({author : author}).exec().then(comment => comment).catch(error => error)
+        }else{return null}
+    }
+
+    // given a parent id return all threaded comments
+    async threads(id){
+        return await Comments.find({parent_id : id }).exec().then(comments => {
+            return comments
+        }).catch(error =>  null);
+    }
+
+    // return a list of comments by post endpoint
+    async returnByEndPoint(post_endpoint){
+        return await Comments.find({post_endpoint : post_endpoint}).exec().then(comments => {
+            return comments;
+        }).catch(error =>  null);
+    }
+
+    async returnbyTag(tag){
+        return await Comments.find({tags : { $in: [tag] }}).exec().then(comments => comments).catch(error => null);
     }
 
 }
