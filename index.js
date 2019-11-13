@@ -1,3 +1,4 @@
+const cluster = require("cluster");
 const feathers = require("@feathersjs/feathers");
 const configuration = require("@feathersjs/configuration");
 const express = require("@feathersjs/express");
@@ -68,14 +69,32 @@ app.on('connection',connection => {
 
 app.publish(() => app.channel("comments"));
 
-app.listen(PORT).on('listening', () => {
-  console.log('comments realtime live server listening on : ',PORT);
-});
+const CLUSTER_COUNT = 4;
+
+if (cluster.isMaster) {
+  for (let i = 0; i < CLUSTER_COUNT; i++) {
+    cluster.fork();
+  }
+} else {
+
+  // ensure the same worker handles websocket connections
+  app.configure(
+    socketio({
+      transports: ["websocket"]
+    })
+  );
+  
+  app.listen(PORT).on('listening', () => {
+    console.log('comments realtime live server listening on : ',PORT);
+  });
+}
+
+
 
 
 /**
  * loading tests only if development is on
  */
-const is_dev = process.env.IS_DEVELOPMENT ||  config.get("IS_DEVELOPMENT");
-is_dev?
-  main() : null
+// const is_dev = process.env.IS_DEVELOPMENT ||  config.get("IS_DEVELOPMENT");
+// is_dev?
+//   main() : null

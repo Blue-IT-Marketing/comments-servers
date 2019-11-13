@@ -24,6 +24,8 @@ class EndPointsService {
         return await EndPoints.find({id : id}).exec().then(endpoints => endpoints).catch(error => null);
     }
 
+    // register endpoint
+
     async create (data){
         const endpoint = {
             id : data.id || uuidv4(),
