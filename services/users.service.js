@@ -23,6 +23,7 @@ class UsersService{
         }).catch(error => error);
     }
 
+    // create user will also be used to register a new user
     async create(data){
         const user = {
           uid: data.uid,

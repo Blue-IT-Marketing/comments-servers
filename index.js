@@ -52,23 +52,44 @@ app.use(express.notFound());
 app.use(express.errorHandler());
 
 
-app.service('comments').on('created', (comment) => {
+app.service('comments').on('created', comment => {
   // todo hook a database right here to save created comments
   console.log('a comment was just created', comment);
 });
 
-app.service('comments').on('removed', (comment) => {
+app.service('comments').on('removed', comment => {
   // todo hook a database method to delete comment right here
   console.log('this comment was deleted', comment);
 });
 
 
-app.on('connection',connection => {
-  app.channel('commenting').join(connection);
+app.service('users').on('created', user => {
+  // consider doing something else here related to the user being created
+  console.log('user created : ', user);
 });
 
-app.publish(() => app.channel("comments"));
 
+app.service('users').on('removed' , user => {
+  // TODO- do something else related to the user being removed
+  console.log('user removed', user);
+});
+
+app.service('end-points').on('created', endpoint => {
+  // TODO- do something here related to endpoint being removed for example
+  // remove all related comments to the endpoint
+  console.log('end-point removed', endpoint);
+});
+
+
+
+app.on('connection',connection => {
+  app.channel('comments-server').join(connection);
+});
+
+app.publish(() => app.channel("comments-server"));
+
+
+// this code enables my app to run as cluster, thereby able to scale horizontally
 const CLUSTER_COUNT = 4;
 
 if (cluster.isMaster) {
@@ -95,6 +116,6 @@ if (cluster.isMaster) {
 /**
  * loading tests only if development is on
  */
-// const is_dev = process.env.IS_DEVELOPMENT ||  config.get("IS_DEVELOPMENT");
-// is_dev?
-//   main() : null
+const is_dev = process.env.IS_DEVELOPMENT ||  config.get("IS_DEVELOPMENT");
+is_dev?
+  main() : null
