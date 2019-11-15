@@ -13,6 +13,8 @@ db.once("open", () => console.log("Connected to mongoose"));
 module.exports = {
     Comments : mongoose.model("Comments", require("./comments.schema")),
     Users : mongoose.model("Users", require("./users.schema")),
-    EndPoints : mongoose.model('EndPoints',require("./endpoints.schema"))
+    EndPoints : mongoose.model('EndPoints',require("./endpoints.schema")),
+    SlackChannels : mongoose.model('SlackChannels', require("./slack.schema")),
+    SlackMessages : mongoose.model('SlackMessages', require("./slack.messages.schema"))
 };
 
