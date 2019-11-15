@@ -4,11 +4,11 @@ let Schema = mongoose.Schema;
 
 const SlackMessagesSchema = new Schema({
     channel_id : {type: String,required:true},
-    thread_id : String,
+    thread_id : {type:String, required:true},
     message_id : {type:String,required:true},
     message : {type:String,required:true},
     timestamp : {type : Date,required:true}
 });
 
 
-modules.exports = SlackMessagesSchema;
+module.exports = SlackMessagesSchema;
