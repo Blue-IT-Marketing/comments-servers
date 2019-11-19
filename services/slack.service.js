@@ -40,6 +40,10 @@ class SlackChannelsService {
         }).catch(error => null)
     }
 
+    async sendToChannel(channel_id,data){
+        
+    }
+
 }
 
 
