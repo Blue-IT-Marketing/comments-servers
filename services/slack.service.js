@@ -6,10 +6,14 @@ const { RTMClient } = require("@slack/rtm-api");
 
 
 class SlackChannelsService {
-    constructor(){
 
-        this.token = process.env.SLACK_BOT_TOKEN || config.get("SLACK_BOT_TOKEN");
-        this.rtm = new RTMClient(token);
+    constructor(){
+        try{
+            this.token = process.env.SLACK_BOT_TOKEN || config.get("SLACK_BOT_TOKEN");
+            this.rtm = new RTMClient(token);
+        }catch(error){
+            console.log('error creating slack rtm : ',error.message);
+        }
     }
 
     async find(channel_id){
@@ -41,7 +45,7 @@ class SlackChannelsService {
     }
 
     async sendToChannel(channel_id,data){
-        
+        // send slack message to channel
     }
 
 }

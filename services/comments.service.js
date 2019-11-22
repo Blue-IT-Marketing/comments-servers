@@ -36,6 +36,7 @@ class CommentsService {
         // check if endpoint exist
         // check if user exist 
         // then create endpoint
+        
 
         return Users.find({uid : data.uid}).exec().then(user => {
             return EndPoints.find({id : data.post_endpoint}).exec().then(endpoint => {
@@ -100,7 +101,6 @@ class CommentsService {
     async returnByTag(tag){
         return await Comments.find({tags : { $in: [tag] }}).exec().then(comments => comments).catch(error => null);
     }
-
 }
 
 module.exports = function(app){
